@@ -22,11 +22,11 @@ def update_dictionary_paths(args):
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--root_path", type=str, default="/data2/newhome/huarui/pythonProject/TaxEL")
+    parser.add_argument("--root_path", type=str, default="./TaxEL")
 
     parser.add_argument(
         "--model_name_or_path",
-        default="/data2/newhome/huarui/pythonProject/TaxEL/pretrain_model/SapBERT-from-PubMedBERT-fulltext",
+        default="SapBERT-from-PubMedBERT-fulltext",
         help="Directory for pretrained model",
     )
 

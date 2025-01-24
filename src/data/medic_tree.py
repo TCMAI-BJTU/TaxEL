@@ -22,12 +22,9 @@ class MEDICTree:
             df1 = pd.read_excel(f"{root_path}/data/tree_code/CTD_Disease_Tree.xlsx")
             df2 = pd.read_excel(f"{root_path}/data/tree_code/CTD_Chemical_Tree.xlsx")
             df = pd.concat([df1, df2])
-        elif dataset_name_or_path in ["cometa", "cometa2", "AAP", "cometa_knn_data", "cometa_knn_clinical", "AAP_Fold0"]:
+        elif dataset_name_or_path in [ "AAP",  "cometa_clinical", "AAP_Fold0"]:
             # df = pd.read_csv(f"{root_path}/data/tree_code/snomed_tree_code_201907.csv")
             df = pd.read_csv(f"{root_path}/data/tree_code/snomed_tree_code_au_2024.csv")
-
-        elif dataset_name_or_path in ["ispo"]:
-            df = pd.read_excel(f"{root_path}/data/tree_code/ISPO_Tree_BioSyn.xlsx")
 
         else:
             raise ValueError("Ontology must be CTD_Disease or CTD_Chemical")
