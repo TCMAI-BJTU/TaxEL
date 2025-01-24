@@ -1,0 +1,15 @@
+/records
+/logs
+/pretrain_model
+__pycache__/
+/data
+/checkpoints
+/test.py
+/cache
+/error_cuis.txt
+/.vscode
+push2hub.py
+fold 10.py
+token_statistic.py
+candidate_differences.txt
+.DS_Store/
