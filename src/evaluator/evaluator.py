@@ -81,8 +81,7 @@ class Evaluator:
         """
         return int(len(set(predicted_cui.split("|")).intersection(set(golden_cui.split("|")))) > 0)
 
-    def evaluate(self, model, epoch, step):
-        model.eval()
+    def evaluate(self, epoch, step):
         self.test_dataset.set_candidate_idxs()
 
         queries = []
@@ -129,7 +128,6 @@ class Evaluator:
                 self.save_checkpoint(epoch, step)
 
         self.logger.info(dict(self.best_result))
-        model.train()
 
     def evaluate_topk_acc(self, data, epoch, step):
         """

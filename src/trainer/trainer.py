@@ -29,7 +29,7 @@ class Trainer:
         if self.use_schedule:
             scheduler = optim.lr_scheduler.CosineAnnealingLR(model.optimizer, self.epochs * len(train_loader))
 
-        self.evaluator.evaluate(model, epoch=0, step=0)
+        self.evaluator.evaluate(epoch=0, step=0)
 
         retrieve_step = int(len(train_loader) * self.retrieve_step_ratio)
 
@@ -43,7 +43,7 @@ class Trainer:
 
             for step, data in enumerate(train_loader):
                 if step % retrieve_step == 0 and step != 0:
-                    self.evaluator.evaluate(model, epoch, step)
+                    self.evaluator.evaluate(epoch, step)
                     self._set_train_candidate_idxs(train_dataset)
 
                 model.optimizer.zero_grad()
@@ -65,7 +65,7 @@ class Trainer:
             progress_bar.close()
 
             model.eval()
-            self.evaluator.evaluate(model, epoch, step)
+            self.evaluator.evaluate(epoch, step)
 
             self._set_train_candidate_idxs(train_dataset)
 

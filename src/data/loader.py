@@ -6,8 +6,6 @@ from src.data.candidate_dataset import CandidateDataset
 from src.logger.logger import setup_logger
 
 
-
-
 def load_queries(data_dir, dataset_name_or_path, stage="train"):
     def process_concepts(concepts):
         for concept in concepts:
@@ -27,12 +25,12 @@ def load_queries(data_dir, dataset_name_or_path, stage="train"):
         with open(data_dir, "r", encoding='utf-8') as f:
             concepts = f.readlines()
         process_concepts(concepts)
-    elif dataset_name_or_path in ["cometa_knn_clinical"]:
+    elif dataset_name_or_path in ["cometa_clinical"]:
         with open(data_dir, "r", encoding='utf-8') as f:
             lines = f.readlines()
             for line in lines:
                 mention, cui = line.strip().split("||")
-                data.append((mention, cui, "cometa2"))
+                data.append((mention, cui, "cometa_clinical"))
     elif dataset_name_or_path in ['AAP', "AAP_Fold0",]:
         with open(data_dir, "r", encoding='utf-8') as f:
             lines = f.readlines()

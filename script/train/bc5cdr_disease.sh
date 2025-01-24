@@ -1,8 +1,8 @@
-CUDA_VISIBLE_DEVICES=7 \
+CUDA_VISIBLE_DEVICES=0 \
 TOKENIZERS_PARALLELISM=false \
 python main.py \
-    --root_path "/data2/newhome/huarui/pythonProject/BioSyn_Tree" \
-    --model_name_or_path "/data2/newhome/huarui/pythonProject/BioSyn_Tree/pretrain_model/SapBERT-from-PubMedBERT-fulltext" \
+    --root_path "TaxEL_PATH" \
+    --model_name_or_path "TaxEL-BC5CDR-Disease" \
     --dataset_name_or_path "bc5cdr-disease" \
     --train_dir "processed_traindev" \
     --train_dictionary_path "train_dictionary.txt" \

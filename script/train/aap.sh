@@ -1,8 +1,8 @@
 CUDA_VISIBLE_DEVICES=7 \
 TOKENIZERS_PARALLELISM=false \
 python main_aap.py \
-    --root_path "/data2/newhome/huarui/pythonProject/BioSyn_Tree" \
-    --model_name_or_path "/data2/newhome/huarui/pythonProject/BioSyn_Tree/pretrain_model/SapBERT-from-PubMedBERT-fulltext" \
+    --root_path "TaxEL_PATH" \
+    --model_name_or_path "TaxEL-AAP" \
     --dataset_name_or_path "AAP" \
     --train_dir "train.txt" \
     --dev_dir "test.txt" \

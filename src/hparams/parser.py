@@ -8,7 +8,7 @@ def update_dictionary_paths(args):
     args.train_dictionary_path = f"{args.root_path}/data/{args.dataset_name_or_path}/{args.train_dictionary_path}"
     args.dev_dictionary_path = f"{args.root_path}/data/{args.dataset_name_or_path}/{args.dev_dictionary_path}"
     args.test_dictionary_path = f"{args.root_path}/data/{args.dataset_name_or_path}/{args.test_dictionary_path}"
-    if args.dataset_name_or_path in ["AAP", "cometa_knn_clinical", "AAP_Fold0"]:
+    if args.dataset_name_or_path in ["AAP", "cometa_clinical", "AAP_Fold0"]:
         args.train_dir = f"{args.root_path}/data/{args.dataset_name_or_path}/train.txt"
         args.dev_dir = f"{args.root_path}/data/{args.dataset_name_or_path}/test.txt"
         args.test_dir = f"{args.root_path}/data/{args.dataset_name_or_path}/test.txt"
@@ -38,7 +38,7 @@ def parse_args():
             "bc5cdr-chemical",
             "bc5cdr-disease",
             "AAP",
-            "cometa_knn_clinical",
+            "cometa_clinical",
             "AAP_Fold0",
         ],
     )

@@ -1,9 +1,9 @@
-CUDA_VISIBLE_DEVICES=6 \
+CUDA_VISIBLE_DEVICES=0 \
 TOKENIZERS_PARALLELISM=false \
 python main.py \
-    --root_path "/data2/newhome/huarui/pythonProject/BioSyn_Tree" \
-    --model_name_or_path "/data2/newhome/huarui/pythonProject/BioSyn_Tree/pretrain_model/SapBERT-from-PubMedBERT-fulltext" \
-    --dataset_name_or_path "cometa_knn_clinical" \
+    --root_path "TaxEL_PATH" \
+    --model_name_or_path "TaxEL-COMETA-c" \
+    --dataset_name_or_path "cometa_clinical" \
     --train_dir "train.txt" \
     --dev_dir "test.txt" \
     --train_dictionary_path "test_dictionary_clinical.txt" \

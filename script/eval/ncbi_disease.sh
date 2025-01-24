@@ -1,6 +1,6 @@
 TOKENIZERS_PARALLELISM=false \
 python eval.py \
-    --model_name_or_path "CLOnEL-NCBI-Disease" \
+    --model_name_or_path "TaxEL-NCBI-Disease" \
     --dataset_name_or_path "ncbi-disease" \
     --eval_dir "processed_test" \
     --eval_dictionary_path "test_dictionary.txt" \
