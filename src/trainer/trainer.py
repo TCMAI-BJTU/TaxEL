@@ -4,7 +4,7 @@ from tqdm import tqdm
 from src.data.candidate_dataset import CandidateDataset
 from src.evaluator.evaluator import Evaluator
 from src.logger.logger import setup_logger
-from src.model.concpet_model import ConceptModel
+from src.model.taxel import TaxEL
 
 
 class Trainer:
@@ -22,7 +22,7 @@ class Trainer:
 
     def train(
         self,
-        model: ConceptModel,
+        model: TaxEL,
         train_dataset: CandidateDataset,
         train_loader: DataLoader,
     ):

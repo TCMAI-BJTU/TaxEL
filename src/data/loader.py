@@ -27,7 +27,7 @@ def load_queries(data_dir, dataset_name_or_path, stage="train"):
         with open(data_dir, "r", encoding='utf-8') as f:
             concepts = f.readlines()
         process_concepts(concepts)
-    elif dataset_name_or_path in ['cometa2', "cometa_knn_data", "cometa_knn_clinical", "ispo"]:
+    elif dataset_name_or_path in ["cometa_knn_clinical"]:
         with open(data_dir, "r", encoding='utf-8') as f:
             lines = f.readlines()
             for line in lines:
@@ -68,7 +68,6 @@ def load_dictionary(dictionary_path, dataset_name_or_path):
 
 
 def load_data(args, shared_tools):
-    # data_path = '/home/huarui/pycharmProject/symptom_entity_link/症状实体链接/BioSyn_Tree/data/ncbi-disease'
     train_queries = load_queries(
         args.train_dir,
         args.dataset_name_or_path,

@@ -8,7 +8,7 @@ def update_dictionary_paths(args):
     args.train_dictionary_path = f"{args.root_path}/data/{args.dataset_name_or_path}/{args.train_dictionary_path}"
     args.dev_dictionary_path = f"{args.root_path}/data/{args.dataset_name_or_path}/{args.dev_dictionary_path}"
     args.test_dictionary_path = f"{args.root_path}/data/{args.dataset_name_or_path}/{args.test_dictionary_path}"
-    if args.dataset_name_or_path in ["bc5cdr-2", "cometa", "cometa2", "AAP", "cometa_knn_data", "cometa_knn_clinical", "AAP_Fold0", "ispo"]:
+    if args.dataset_name_or_path in ["AAP", "cometa_knn_clinical", "AAP_Fold0"]:
         args.train_dir = f"{args.root_path}/data/{args.dataset_name_or_path}/train.txt"
         args.dev_dir = f"{args.root_path}/data/{args.dataset_name_or_path}/test.txt"
         args.test_dir = f"{args.root_path}/data/{args.dataset_name_or_path}/test.txt"
@@ -22,12 +22,11 @@ def update_dictionary_paths(args):
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--root_path", type=str, default="/data2/newhome/huarui/pythonProject/BioSyn_Tree")
+    parser.add_argument("--root_path", type=str, default="/data2/newhome/huarui/pythonProject/TaxEL")
 
     parser.add_argument(
         "--model_name_or_path",
-        default="/data2/newhome/huarui/pythonProject/BioSyn_Tree/pretrain_model/SapBERT-from-PubMedBERT-fulltext",
-        # default="/var/lib/docker/huarui/pythonProject/BioSyn_Tree/pretrain_model/SapBERT-from-PubMedBERT-fulltext-mean-token",
+        default="/data2/newhome/huarui/pythonProject/TaxEL/pretrain_model/SapBERT-from-PubMedBERT-fulltext",
         help="Directory for pretrained model",
     )
 
@@ -38,14 +37,9 @@ def parse_args():
             "ncbi-disease",
             "bc5cdr-chemical",
             "bc5cdr-disease",
-            "bc5cdr",
-            "bc5cdr-2",
-            "cometa",
             "AAP",
-            "cometa_knn_data",
             "cometa_knn_clinical",
             "AAP_Fold0",
-            "ispo",
         ],
     )
 
@@ -54,7 +48,7 @@ def parse_args():
     parser.add_argument("--train_dir", type=str, default="processed_traindev")
     parser.add_argument("--train_dictionary_path", type=str, default="train_dictionary.txt")
 
-    parser.add_argument("--dev_dir", type=str, default="processed_test")  # 记得改上面的dev.txt
+    parser.add_argument("--dev_dir", type=str, default="processed_test") 
     parser.add_argument("--dev_dictionary_path", type=str, default="test_dictionary.txt")
 
     parser.add_argument("--test_dir", type=str, default="processed_test")
@@ -82,7 +76,6 @@ def parse_args():
     parser.add_argument("--use_tree_similarity", default=True, type=bool)
     parser.add_argument("--tree_ratio", default=0.5, type=float)
     parser.add_argument("--retrieve_tree_ratio", default=0.5, type=float)
-    # parser.add_argument("--only_current", action="store_true")
     parser.add_argument("--tax_aware", default="current", type=str, choices=["current", "current_parent_child", "none"])
 
     parser.add_argument("--use_graph_propagation", default=False, type=bool, help="是否使用图传播")
@@ -100,8 +93,5 @@ def parse_args():
     logger = setup_logger(log_file=args.log_file)
     for key, value in vars(args).items():
         logger.info(f"{key}: {value}")
-    # TopK	max_len	batch	epoch	last_layer	lr	loss	retrieve_sim	train_sim	weight_decay	tree_ratio
-    args_str = f"{args.model_name_or_path}\t{args.topk}\t{args.max_length}\t{args.batch_size}\t{args.epochs}\t{args.last_layer}\t{args.learning_rate}\t{args.loss_func}\t{args.retrieve_similarity_func}\t{args.train_similarity_func}\t{args.weight_decay}\t{args.tree_ratio}"
-    logger.info(f"args_str: {args_str}")
 
     return args

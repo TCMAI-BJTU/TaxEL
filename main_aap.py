@@ -2,7 +2,7 @@ from src.utils.shared_tools import SharedTools
 from src.evaluator.evaluator import Evaluator
 from src.data.loader import load_data
 from src.hparams.parser import parse_args
-from src.model.concpet_model import ConceptModel
+from src.model.taxel import ConceptModel
 from src.trainer.trainer import Trainer
 
 

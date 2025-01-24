@@ -148,7 +148,7 @@ class CandidateDataset(Dataset):
         if self.retrieve_similarity_func == "cosine":
             faiss.normalize_L2(query_embeds)
             faiss.normalize_L2(dict_embeds)
-        if not self.use_cuda:
+        if self.use_cuda:
             # 构建Faiss的GPU索引
             gpu_resources = faiss.StandardGpuResources()  # 创建GPU资源
             flat_config = faiss.GpuIndexFlatConfig()
@@ -174,7 +174,6 @@ class CandidateDataset(Dataset):
 
     def retrieve_candidate_with_tree(self, query_embeds, topk):
         """Retrieve candidates using tree-based approach."""
-        """先根据树结构找到上中下三个位置的所有候选实体的索引，然后进行排序，获取前半部分的索引，然后使用原始的索引补充，直到补充到TopK"""
         query_embeds = np.array(query_embeds)
 
         # Get initial similarity scores for all candidates
@@ -220,8 +219,8 @@ class CandidateDataset(Dataset):
             # Get valid indices (not -1) from parent and child candidates
             tree_candidates = np.concatenate(
                 [
-                    # parent_idxs[i][parent_idxs[i] != -1],
-                    # child_idxs[i][child_idxs[i] != -1],
+                    parent_idxs[i][parent_idxs[i] != -1],
+                    child_idxs[i][child_idxs[i] != -1],
                     current_idxs[i][current_idxs[i] != -1],
                 ]
             )
