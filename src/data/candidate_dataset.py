@@ -145,7 +145,7 @@ class CandidateDataset(Dataset):
         query_embeds = np.array(query_embeds)
         dict_embeds = np.array(self.dict_embeds)
 
-        if self.retrieve_similarity_func == "cosine":
+        if self.retrieve_similarity_func != "cosine":
             faiss.normalize_L2(query_embeds)
             faiss.normalize_L2(dict_embeds)
         if self.use_cuda:
