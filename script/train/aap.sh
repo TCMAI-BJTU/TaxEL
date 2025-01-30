@@ -5,9 +5,9 @@ python main_aap.py \
     --model_name_or_path "TaxEL-AAP" \
     --dataset_name_or_path "AAP" \
     --train_dir "train.txt" \
-    --dev_dir "test.txt" \
-    --train_dictionary_path "test_dictionary.txt" \
-    --dev_dictionary_path "test_dictionary.txt" \
+    --dev_dir "dev.txt" \
+    --train_dictionary_path "train_dictionary.txt" \
+    --dev_dictionary_path "dev_dictionary.txt" \
     --max_length 30 \
     --topk 20 \
     --batch_size 16 \

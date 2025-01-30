@@ -6,8 +6,8 @@ python main.py \
     --dataset_name_or_path "bc5cdr-chemical" \
     --train_dir "processed_traindev" \
     --train_dictionary_path "train_dictionary.txt" \
-    --dev_dir "processed_test" \
-    --dev_dictionary_path "test_dictionary.txt" \
+    --dev_dir "processed_dev" \
+    --dev_dictionary_path "dev_dictionary.txt" \
     --max_length 25 \
     --topk 20 \
     --batch_size 8 \

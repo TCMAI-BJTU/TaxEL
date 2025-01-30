@@ -5,7 +5,7 @@ python main.py \
     --model_name_or_path "TaxEL-AAP" \
     --dataset_name_or_path "AAP_Fold0" \
     --train_dir "train.txt" \
-    --dev_dir "test.txt" \
+    --dev_dir "dev.txt" \
     --train_dictionary_path "test_dictionary.txt" \
     --dev_dictionary_path "test_dictionary.txt" \
     --max_length 30 \

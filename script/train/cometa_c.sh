@@ -5,7 +5,7 @@ python main.py \
     --model_name_or_path "TaxEL-COMETA-c" \
     --dataset_name_or_path "cometa_clinical" \
     --train_dir "train.txt" \
-    --dev_dir "test.txt" \
+    --dev_dir "dev.txt" \
     --train_dictionary_path "test_dictionary_clinical.txt" \
     --dev_dictionary_path "test_dictionary_clinical.txt" \
     --max_length 25 \
