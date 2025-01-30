@@ -17,8 +17,8 @@
 - [CTD-Disease](https://drive.google.com/file/d/1BMo38fPwhDWNtb3AHW1GsQFVn8s7dZzD/view?usp=drive_link)
     - Download from [CTD](https://web.archive.org/web/20180108033447/http://ctdbase.org/downloads)
     - Used for bc5cdr-disease and ncbi-disease
-- [SNOMED-CT](https://drive.google.com/file/d/1QkqAyZzvknigxQKrAouwLaM0ZiPyFYG-/view?usp=drive_link)
-    - Download from [SNOMED-CT](https://www.nlm.nih.gov/healthit/snomedct/index.html?_gl=1*z0twj7*_ga*MzQ4OTkzNTEyLjE2NTYzOTg1Nzc.*_ga_P1FPTH9PL4*MTczMjg1Mzg3Mi40OC4wLjE3MzI4NTM4NzcuMC4wLjA.*_ga_7147EPK006*MTczMjg1Mzg3Mi40Ny4wLjE3MzI4NTM4NzcuMC4wLjA.) 
+- SNOMED-CT
+    - Download from [SNOMED-CT](https://www.healthterminologies.gov.au/access-clinical-terminology/access-snomed-ct-au/) 
     - Used for AAP and COMETA
 
 
