@@ -37,11 +37,13 @@ bash scripts/eval/ncbi_disease.sh
 ~~~    
 
 
-<!-- ### Trained models
+### Trained models
 
 You can directly use our trained model for evaluation and prediction.
 
-- [ncbi-disease](https://huggingface.co/TCMLLM/CLOnEL-NCBI-Disease)
+TODO: After anonymity is no longer required, a Huggingface link will be provided
+
+<!-- - [ncbi-disease](https://huggingface.co/TCMLLM/CLOnEL-NCBI-Disease)
 - [bc5cdr-disease](https://huggingface.co/TCMLLM/CLOnEL-BC5CDR-Disease)
 - [bc5cdr-chemical](https://huggingface.co/TCMLLM/CLOnEL-BC5CDR-Chemical)
 - [cometa-cf](https://huggingface.co/TCMLLM/CLOnEL-COMETA-CF)
