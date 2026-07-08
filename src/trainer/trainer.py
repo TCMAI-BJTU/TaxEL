@@ -77,11 +77,12 @@ class Trainer:
         return model
 
     def _set_train_candidate_idxs(self, train_dataset):
-        if train_dataset.dict_embeds is not None and self.evaluator.test_dataset.dict_embeds is not None:
-            if train_dataset.dict_embeds.shape == self.evaluator.test_dataset.dict_embeds.shape:
-                train_dataset.set_candidate_idxs(
-                    dict_embeds=self.evaluator.test_dataset.dict_embeds,
-                )
+        if (train_dataset.dict_embeds is not None
+                and self.evaluator.test_dataset.dict_embeds is not None
+                and train_dataset.dict_embeds.shape == self.evaluator.test_dataset.dict_embeds.shape):
+            train_dataset.set_candidate_idxs(
+                dict_embeds=self.evaluator.test_dataset.dict_embeds,
+            )
         else:
             train_dataset.set_candidate_idxs()
 
