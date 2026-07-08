@@ -5,8 +5,8 @@
 - [ncbi-disease](https://github.com/dmis-lab/BioSyn)
 - [bc5cdr-disease](https://github.com/dmis-lab/BioSyn)
 - [bc5cdr-chemical](https://github.com/dmis-lab/BioSyn)
-- [COMETA-clinic](https://drive.google.com/file/d/1bm_b1dwJYxp3vbMw7vc05-CFWD61JyrF/view?usp=drive_link)
-- [AAP](https://drive.google.com/file/d/18VQ6LxSbv8Q4TboTHjeX4DFDAXWd3JLD/view?usp=drive_link)
+- [COMETA](https://drive.google.com/file/d/1XMmLWl54aU3SWQgJ_ULOX_LxZ1EBfw-i/view?usp=drive_link)
+- [AAP](https://drive.google.com/file/d/13gJRmCACLcUiFeVbXbPsjRGEOnEBeD1u/view?usp=drive_link)
 
 
 ## Taxonomy
