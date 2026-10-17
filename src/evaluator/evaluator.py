@@ -1,11 +1,25 @@
-import copy
+# -*- coding: utf-8 -*-
+# @Time    : 2024/8/6 18:00
+# @Author  : Rui Hua
+# @Email   :
+# @File    : evaluator.py
+# @Software: PyCharm
 import json
+import logging
 import os
 from collections import defaultdict
+from typing import Optional, TYPE_CHECKING
+
 import numpy as np
+
 from src.data.candidate_dataset import CandidateDataset
 from src.data.loader import load_queries, load_dictionary
-from src.logger.logger import setup_logger
+
+if TYPE_CHECKING:
+    from src.logger.logger import EnhancedLogger
+
+logger = logging.getLogger(__name__)
+TARGET_METRICS = ("acc1", "acc5", "acc10", "acc20")
 
 
 class Evaluator:
@@ -13,18 +27,20 @@ class Evaluator:
         self._init_config(args, dev_or_test)
 
         self.best_result = defaultdict(int)
-        self.logger = setup_logger(self.log_file)
 
         self._init_tools(shared_tools)
         self._init_data(args, shared_tools)
 
-        self.best_encoder = shared_tools.encoder
+        self.enhanced_logger: Optional["EnhancedLogger"] = None  # 将由训练器设置
 
     def _init_config(self, args, dev_or_test):
         """Initialize configuration."""
         self.dev_or_test = dev_or_test
         self.root_path = args.root_path
         self.dataset_name_or_path = args.dataset_name_or_path
+        self.output_path = args.output_path
+        self.checkpoint_dir = getattr(args, "checkpoint_dir", None)
+        self.records_dir = getattr(args, "records_dir", None)
         self.log_file = args.log_file
         self.learning_rate = args.learning_rate
         self.debug = args.debug
@@ -32,6 +48,7 @@ class Evaluator:
         self.dev_dir = args.dev_dir
         self.test_dictionary_path = args.test_dictionary_path
         self.test_dir = args.test_dir
+        self.normalize_cui_plus = getattr(args, "normalize_cui_plus", False)
 
     def _init_tools(self, shared_tools):
         """Initialize tools."""
@@ -64,14 +81,17 @@ class Evaluator:
         self.test_dataset = CandidateDataset(args=args, queries=eval_queries, dicts=self.eval_dictionary, shared_tools=shared_tools, stage="test")
 
     def save_checkpoint(self, epoch, step):
-        checkpoint_path = f"{self.root_path}/checkpoints/{self.dataset_name_or_path}"
-        if not os.path.exists(checkpoint_path):
-            os.makedirs(checkpoint_path)
-        checkpoint = os.path.join(checkpoint_path, f"model_{str(self.learning_rate)}")
+        checkpoint = self.checkpoint_dir or os.path.join(
+            self.root_path, self.output_path, self.dataset_name_or_path,
+            f"model_{self.learning_rate}",
+        )
+        os.makedirs(checkpoint, exist_ok=True)
         self.test_dataset.encoder.save_pretrained(checkpoint, create_model_card=False)
         self.test_dataset.tokenizer.save_pretrained(checkpoint, create_model_card=False)
-        self.logger.info(f"Model saved at epoch {epoch} step {step}, Best Acc1: {self.best_result['acc1']:.4f}")
-        self.best_encoder = copy.deepcopy(self.test_dataset.encoder)
+        with open(os.path.join(checkpoint, "checkpoint_metadata.json"), "w") as f:
+            json.dump({"kind": "best", "selection_split": "dev", "epoch": epoch,
+                       "step": step, "metrics": dict(self.best_result)}, f, indent=2)
+        logger.info("Saved BEST dev checkpoint at epoch %s step %s to %s", epoch, step, checkpoint)
 
     def check_label(self, predicted_cui, golden_cui):
         """
@@ -79,9 +99,14 @@ class Evaluator:
         So, set label '1' if any cui is matched within composite cui (or single cui)
         Otherwise, set label '0'
         """
+        if self.normalize_cui_plus:
+            predicted_cui = predicted_cui.replace("+", "|")
+            golden_cui = golden_cui.replace("+", "|")
         return int(len(set(predicted_cui.split("|")).intersection(set(golden_cui.split("|")))) > 0)
 
-    def evaluate(self, epoch, step):
+    def evaluate(self, model, epoch, step):
+        was_training = model.training
+        model.eval()
         self.test_dataset.set_candidate_idxs()
 
         queries = []
@@ -96,7 +121,8 @@ class Evaluator:
 
             dict_mentions = []
             for mention in mentions:
-                query_idx = self.test_dataset.query_names.index(mention)
+                # 从 list.index 修改为了 字典
+                query_idx = self.test_dataset.query_name_to_idx[mention]
 
                 pred_candidate_idxs = self.test_dataset.candidate_idxs[query_idx].reshape(-1)  # type: ignore
                 pred_candidate_scores = self.test_dataset.candidate_scores[query_idx].reshape(-1)
@@ -120,16 +146,25 @@ class Evaluator:
 
         result = self.evaluate_topk_acc({"queries": queries}, epoch, step)
 
-        if result["acc1"] >= self.best_result["acc1"]:  # type: ignore
+        # 记录评估结果到增强日志器
+        if self.enhanced_logger:
+            self.enhanced_logger.log_evaluation_results(epoch, step, result)
+
+        if not self.best_result or result["acc1"] > self.best_result["acc1"] or (result["acc1"] == self.best_result["acc1"] and result["acc5"] > self.best_result["acc5"]):
             for i in range(len(queries[0]["mentions"][0]["candidates"])):
                 self.best_result[f"acc{i + 1}"] = result[f"acc{i + 1}"]  # type: ignore
             self.best_result["epoch"] = epoch
+            self.best_result["step"] = step
+
             if self.dev_or_test == "dev":
                 self.save_checkpoint(epoch, step)
 
-        self.logger.info(dict(self.best_result))
+        output_str = ", ".join(f"{k}: {self.best_result[k]:.4f}" for k in TARGET_METRICS if k in self.best_result)
+        logger.info(f"Best result - Epoch {self.best_result.get('epoch', 'N/A')}: {output_str}")
+        model.train(was_training)
+        return result
 
-    def evaluate_topk_acc(self, data, epoch, step):
+    def evaluate_topk_acc(self, data, epoch, step) -> dict[str, float]:
         """
         evaluate acc@1~acc@k
         """
@@ -153,15 +188,14 @@ class Evaluator:
 
             data["acc{}".format(i + 1)] = round(hit / len(queries), 4)
 
-        output_str = ""
-        for k, v in data.items():
-            if "acc" in k:
-                output_str += f"{k}: {v:.4f}, "
-
-        self.logger.info(output_str)
-
-        result_file = f"records/result_{epoch}_{step}.json"
-        json.dump(data, open(result_file, "w", encoding="utf-8"), ensure_ascii=False, indent=4)
-        self.logger.info(f"Result saved to {result_file}")
+        self.save_result(data, epoch, step)
 
         return data
+
+    def save_result(self, data, epoch, step):
+        directory = self.records_dir or f"./records/{self.dataset_name_or_path}"
+        os.makedirs(directory, exist_ok=True)
+        result_file = os.path.join(directory, f"result_{epoch}_{step}.json")
+        with open(result_file, "w", encoding="utf-8") as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
+        logger.info("Result saved to %s", result_file)

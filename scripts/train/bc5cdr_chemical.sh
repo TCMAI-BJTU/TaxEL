@@ -1,9 +1,23 @@
-CUDA_VISIBLE_DEVICES=0 \
+#!/usr/bin/env bash
+set -euo pipefail
+REPO_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
+cd "$REPO_ROOT"
+PYTHON_BIN="${PYTHON_BIN:-python}"
+OUTPUT_PATH="${OUTPUT_PATH:-checkpoints/bc5cdr_chemical_$(date +%Y%m%d_%H%M%S)_$$}"
+mkdir -p cache
+
+ROOT_PATH="${ROOT_PATH:-$REPO_ROOT}"
+model_name_or_path="${MODEL_NAME_OR_PATH:-$ROOT_PATH/pretrain_model/SapBERT-from-PubMedBERT-fulltext}"
+dataset_name_or_path="bc5cdr-chemical"
+
 TOKENIZERS_PARALLELISM=false \
-python main.py \
-    --root_path "TaxEL_PATH" \
-    --model_name_or_path "TaxEL-BC5CDR-Chemical" \
-    --dataset_name_or_path "bc5cdr-chemical" \
+"$PYTHON_BIN" main.py \
+    --root_path "$ROOT_PATH" \
+    --output_path "$OUTPUT_PATH" \
+    --model_name_or_path "$model_name_or_path" \
+    --dataset_name_or_path "$dataset_name_or_path" \
+    --test_dir "processed_test" \
+    --test_dictionary_path "test_dictionary.txt" \
     --train_dir "processed_traindev" \
     --train_dictionary_path "train_dictionary.txt" \
     --dev_dir "processed_dev" \
@@ -17,5 +31,10 @@ python main.py \
     --tree_ratio 0.5 \
     --retrieve_step_ratio 0.5 \
     --retrieve_similarity_func dot \
-    --loss_func KL \
-    --tax_aware current
+    --loss_func hybrid_kl_marginal_nll \
+    --tax_aware current_parent_child_sibling \
+    --kl_alpha 0.1 \
+    --force_positive_injection false \
+    --remove_self_match false \
+    --fuzzy_cui_match false \
+    --normalize_cui_plus false

@@ -1,9 +1,19 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2024/8/4 16:57
+# @Author  : Rui Hua
+# @Email   :
+# @File    : loader.py
+# @Software: PyCharm
 import glob
+import logging
 import os
+
 import numpy as np
 from torch.utils.data import DataLoader
+
 from src.data.candidate_dataset import CandidateDataset
-from src.logger.logger import setup_logger
+
+logger = logging.getLogger(__name__)
 
 
 def load_queries(data_dir, dataset_name_or_path, stage="train"):
@@ -21,18 +31,21 @@ def load_queries(data_dir, dataset_name_or_path, stage="train"):
                 data.append((mention, cui, query_type))
 
     data = []
-    if dataset_name_or_path in ['bc5cdr-2', 'cometa']:
-        with open(data_dir, "r", encoding='utf-8') as f:
+    if dataset_name_or_path in ["bc5cdr-2", "cometa"]:
+        with open(data_dir, "r", encoding="utf-8") as f:
             concepts = f.readlines()
         process_concepts(concepts)
-    elif dataset_name_or_path in ["cometa_clinical"]:
-        with open(data_dir, "r", encoding='utf-8') as f:
+    elif dataset_name_or_path in ["cometa_clinical", "sympel", "cometa_knn_data", "cometa", "ispo_en", "mesh_disease", "mesh_chemical", "icd_en", "icd_zh"]:
+        with open(data_dir, "r", encoding="utf-8") as f:
             lines = f.readlines()
             for line in lines:
                 mention, cui = line.strip().split("||")
                 data.append((mention, cui, "cometa_clinical"))
-    elif dataset_name_or_path in ['AAP', "AAP_Fold0",]:
-        with open(data_dir, "r", encoding='utf-8') as f:
+    elif dataset_name_or_path in [
+        "AAP",
+        "AAP_Fold0",
+    ]:
+        with open(data_dir, "r", encoding="utf-8") as f:
             lines = f.readlines()
             for line in lines:
                 _, mention, cui = line.strip().split("||")
@@ -40,7 +53,7 @@ def load_queries(data_dir, dataset_name_or_path, stage="train"):
     elif dataset_name_or_path in ["ncbi-disease", "bc5cdr-chemical", "bc5cdr-disease"]:
         concept_files = glob.glob(os.path.join(data_dir, "*.concept"))
         for concept_file in concept_files:
-            with open(concept_file, "r", encoding='utf-8') as f:
+            with open(concept_file, "r", encoding="utf-8") as f:
                 concepts = f.readlines()
 
             process_concepts(concepts)
@@ -55,10 +68,11 @@ def load_queries(data_dir, dataset_name_or_path, stage="train"):
 
 def load_dictionary(dictionary_path, dataset_name_or_path):
     data = []
-    lines = open(dictionary_path, mode='r', encoding='utf-8').readlines()
+    lines = open(dictionary_path, mode="r", encoding="utf-8").readlines()
     for line in lines:
         line = line.strip()
-        if line == "": continue
+        if line == "":
+            continue
         cui, name = line.split("||")
         data.append((name, cui))
     data = np.array(data)
@@ -66,16 +80,11 @@ def load_dictionary(dictionary_path, dataset_name_or_path):
 
 
 def load_data(args, shared_tools):
-    train_queries = load_queries(
-        args.train_dir,
-        args.dataset_name_or_path,
-        stage="train"
-    )
+    train_queries = load_queries(args.train_dir, args.dataset_name_or_path, stage="train")
     train_dictionaries = load_dictionary(args.train_dictionary_path, args.dataset_name_or_path)
     if args.debug:
         train_queries = train_queries[:500]
         train_dictionaries = train_dictionaries[:3000]
-    logger = setup_logger(args.log_file)
     logger.info(f"train_queries:{len(train_queries)}")
     logger.info(f"train_dictionaries:{len(train_dictionaries)}")
     train_dataset = CandidateDataset(

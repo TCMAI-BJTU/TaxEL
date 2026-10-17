@@ -21,6 +21,7 @@ class SharedTools:
         self.dataset_name_or_path = args.dataset_name_or_path
         self.tree_ratio = args.tree_ratio
         self.root_path = args.root_path
+        self.tree_code_path = getattr(args, "tree_code_path", None)
 
     def _init_tokenizer(self):
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_name_or_path)
@@ -43,5 +44,6 @@ class SharedTools:
     def _init_tree_sim_tool(self):
         """Initialize tree similarity if enabled."""
         if not self.use_tree_similarity:
+            self.tree_sim = None
             return
-        self.tree_sim = MEDICTree(dataset_name_or_path=self.dataset_name_or_path, root_path=self.root_path, tree_ratio=self.tree_ratio)
+        self.tree_sim = MEDICTree(dataset_name_or_path=self.dataset_name_or_path, root_path=self.root_path, tree_ratio=self.tree_ratio, tree_code_path=self.tree_code_path)

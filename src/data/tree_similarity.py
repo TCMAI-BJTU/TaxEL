@@ -1,11 +1,15 @@
-from collections import defaultdict
+# -*- coding: utf-8 -*-
+# @Time    : 2024/6/13
+# @Author  : Rui Hua
+# @Email   :
+# @File    : tree_similarity.py
+# @Software: PyCharm
 import math
 import os
-from functools import lru_cache
 import pickle
+from collections import defaultdict
 from typing import List
 
-import pandas as pd
 from tqdm import tqdm
 
 

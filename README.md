@@ -1,5 +1,7 @@
 # TaxEL
 
+Website: [http://el.tcmkg.com/](http://el.tcmkg.com/)
+
 ## Datasets
 
 - [ncbi-disease](https://github.com/dmis-lab/BioSyn)
@@ -23,15 +25,27 @@
 
 
 ## Train
-~~~bash
+```bash
 cd TaxEL
 bash scripts/train/ncbi_disease.sh
-~~~
+```
 
 
 ## Evaluation
 
-~~~bash
+```bash
 cd TaxEL
-bash scripts/eval/ncbi_disease.sh
-~~~    
+CHECKPOINT_PATH="/path/to/checkpoint" bash scripts/eval/ncbi_disease.sh
+```    
+
+## Citation
+
+```bibtex
+@article{hua2026taxel,
+  title={TaxEL: Taxonomy-Enhanced Entity Representation Learning for Biomedical Entity Linking},
+  author={Hua, Rui and Liu, Zeyu and Shu, Zixin and Chang, Kai and Ye, Mingwei and Xia, Jianan and Zhou, Xuezhong},
+  journal={IEEE Journal of Biomedical and Health Informatics},
+  year={2026},
+  publisher={IEEE}
+}
+```
